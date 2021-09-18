@@ -10,7 +10,7 @@ This repo is intended for everyone to get started with the modern data stack eff
 - Ingestion: **Airbyte**
 - Warehousing: **BigQuery**
 - Transformation: **dbt**
-- Orchestration (optional): **Prefect** (Formerly Prefect DBT)
+- Orchestration (optional): **Prefect** (Formerly Airflow)
 - BI & data discovery: **Metabase**
 
 Terraform will create a project on Google Cloud Platform, provision virtual machines for different services, and spin up other necessary resources. 
@@ -125,10 +125,10 @@ You can use the JSON service account to authenticate the service access to your 
 
 ![](images/2021-06-13-15-06-56.png)
 
-You will get a command similar to this: `gcloud beta compute ssh --zone "asia-southeast1-a" "tf-airbyte-demo-airbyte"  --project "tf-airbyte-demo"`. Next, add the following to the command to port-forward the Airbyte UI locally: ` -- -L 8000:localhost:8000 -L 8001:localhost:8001 -N -f`. Your final command will look like this: 
+You will get a command similar to this: `gcloud beta compute ssh --zone "us-west1-a" "open-data-demo-airbyte"  --project "open-data-demo"`. Next, add the following to the command to port-forward the Airbyte UI locally: ` -- -L 8000:localhost:8000 -L 8001:localhost:8001 -N -f`. Your final command will look like this: 
 
 ```
-gcloud beta compute ssh --zone "asia-southeast1-a" "tf-airbyte-demo-airbyte"  --project "tf-airbyte-demo" -- -L 8000:localhost:8000 -L 8001:localhost:8001 -N -f
+gcloud beta compute ssh --zone "us-west1-a" "open-data-demo-airbyte"  --project "open-data-demo" -- -L 8000:localhost:8000 -L 8001:localhost:8001 -N -f
 ```
 
 **Note:** Be sure to delete the newline character after copying from the GCP UI. 
@@ -142,20 +142,17 @@ You can access the Airbyte installation at `/airbyte/` inside the VM.
 
 [dbt](https://www.getdbt.com) (data build tool) is a powerful open-source data transformation tool using SQL. It enables Data Analysts to do the work previously reserved for Data Engineers. It also helps create an entirely new position called Analytics Engineer, a hybrid of a Data Analyst and a Data Engineer. You can read more about the position in my blog [here](https://tuanchris.medium.com/become-an-analytics-engineer-in-90-days-759659d22ffd). 
 
-Unlike Airbyte, Prefect DBT, and Metabase, you don't need a server to run dbt. You can register for a free (forever) 1-seat account by visiting their [website](https://www.getdbt.com/signup/).
-### Orchestrate workflow with Prefect DBT
 
-[Prefect DBT](https://prefect_dbt.apache.org/) is a battle-proven workflow orchestration tool created by Airbnb. With a modern data stack, hopefully, you won't have to use Prefect DBT a lot. However, in some cases where some customization is needed, Prefect DBT can be your go-to tool. 
+### Accessing Prefect / dbt
 
-To access the UI, get the SSH command similar to the above section with Airbyte. Use the following command for port-forward: 
+To gain command line access to the instance running Prefect and DBT, you can simply navigate to Compute Engine and select VM Instances. Click the SSH button from the instance named `open-data-demo-prefect-dbt`.
 
-```bash
-gcloud beta compute ssh --zone "asia-southeast1-a" "tf-airbyte-demo-prefect_dbt"  --project "tf-airbyte-demo" -- -L 8080:localhost:8080 -N -f
+You can also use the gcloud command as we did above using the following command:
+```
+gcloud beta compute ssh --zone "us-west1-a" "open-data-demo-prefect-dbt"  --project "open-data-demo"
 ```
 
-Now you can access the Prefect DBT installation at `localhost:8080`. The default username & password are `admin` and `admin`.
 
-You can access the prefect_dbt installation at `/prefect_dbt/` inside the VM.
 ### Visualize data with Metabase
 
 [Metabase](https://www.metabase.com/) is an open-source data visualization and discovery tool. It is super user-friendly and easy to get started with. 
@@ -163,7 +160,7 @@ You can access the prefect_dbt installation at `/prefect_dbt/` inside the VM.
 To access the Metabase UI, get the SSH command similar to the above section with Airbyte. Then, use the following command for port-forward: 
 
 ```
-gcloud beta compute ssh --zone "asia-southeast1-a" "tf-airbyte-demo-metabase"  --project "tf-airbyte-demo" -- -L 3000:localhost:3000 -N -f
+gcloud beta compute ssh --zone "us-west1-a" "open-data-demo-metabase"  --project "open-data-demo" -- -L 3000:localhost:3000 -N -f
 ```
 ## Clean up
 
@@ -174,3 +171,10 @@ terraform destroy
 ```
 
 **Warning:** This will delete any persisted data and resources in the project. Alternatively, you can turn off the unused GCE to save costs as well.
+
+
+# TODO
+1. Change terraform deployment so that metabase is accessable from the internet.
+2. Assign metabase a permanent IP address.
+3. Register a demo-domain.
+4. Potentially install airbyte-tentacle https://github.com/garden-of-delete/airbyte-tentacle 
