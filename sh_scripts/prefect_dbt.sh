@@ -17,8 +17,8 @@ pip3 install dbt==0.20.1
 #Download Project Repo.
 
 cd ~/
-gcloud source repos clone github_allenfp_project-open-data-stack --project=afp-open-data-stack-v0
-cd github_allenfp_project-open-data-stack
+gcloud source repos clone github_allenfp_open-data-stack-project
+cd github_allenfp_open-data-stack-project
 git checkout main
 
 
