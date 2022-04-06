@@ -177,4 +177,3 @@ terraform destroy
 1. Change terraform deployment so that metabase is accessable from the internet.
 2. Assign metabase a permanent IP address.
 3. Register a demo-domain.
-4. Potentially install airbyte-tentacle https://github.com/garden-of-delete/airbyte-tentacle 
